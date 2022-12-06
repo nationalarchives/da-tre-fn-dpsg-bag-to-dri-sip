@@ -1,0 +1,4 @@
+requests~=2.28.1
+jsonschema~=4.15.0
+s3lib~=0.0.8
+trelib~=0.0.4
