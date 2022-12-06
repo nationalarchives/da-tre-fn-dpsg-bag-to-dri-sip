@@ -48,7 +48,7 @@ jobs:
         run: |
           python --version
           cd ${{ env.build_dir }}
-          aws codeartifact login --tool pip --repository ${{ secrets.REPOSITORY }} --domain ${{ secrets.DOMAIN }} --domain-owner ${{ secrets.MANAGEMENT_ARN_NUMBER }} --region ${{ secrets.REGION }}
+          aws codeartifact login --tool pip --repository ${{ secrets.AWS_CODEARTIFACT_REPOSITORY_NAME }} --domain ${{ secrets.AWS_CODEARTIFACT_REPOSITORY_DOMAIN }} --domain-owner ${{ secrets.AWS_CODEARTIFACT_REPOSITORY_ACCOUNT }} --region ${{ secrets.AWS_REGION }}
           pip install -r requirements.txt
           python -m unittest discover ./tests -p 'test_*.py'
       - name: Get the version to use to tag this build
