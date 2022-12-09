@@ -1,10 +1,7 @@
 FROM public.ecr.aws/lambda/python:3.8
 
 # Loading Variables from Github Actions environment
-ARG AWS_CODEARTIFACT_REPOSITORY_NAME
-ARG AWS_CODEARTIFACT_REPOSITORY_DOMAIN
-ARG AWS_CODEARTIFACT_REPOSITORY_ACCOUNT
-ARG AWS_REGION
+ARG PIP_INDEX_URL
 
 # Copy function code
 COPY tre_bagit_to_dri_sip.py ${LAMBDA_TASK_ROOT}
