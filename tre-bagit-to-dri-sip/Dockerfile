@@ -18,7 +18,6 @@ COPY metadata-schema.txt ${LAMBDA_TASK_ROOT}
 COPY requirements.txt ./requirements.txt
 RUN  yum -y update \
     && yum clean all \
-    && aws codeartifact login --tool pip --repository ${AWS_CODEARTIFACT_REPOSITORY_NAME} --domain ${AWS_CODEARTIFACT_REPOSITORY_DOMAIN} --domain-owner ${AWS_CODEARTIFACT_REPOSITORY_ACCOUNT} --region ${AWS_REGION} \
     && pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)

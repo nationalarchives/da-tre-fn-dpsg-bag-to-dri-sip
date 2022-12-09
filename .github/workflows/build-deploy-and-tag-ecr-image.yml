@@ -24,12 +24,6 @@ jobs:
           printf 'github.event.repository.name=%s\n' "${{ github.event.repository.name }}"
           printf 'github.api_url=%s\n' "${{ github.api_url }}"
           printf 'env.python_version=%s\n' "${{ env.python_version }}"
-      - name: Exporting values to environment
-        run: |
-          export AWS_CODEARTIFACT_REPOSITORY_NAME=${{ secrets.AWS_CODEARTIFACT_REPOSITORY_NAME }}
-          export AWS_CODEARTIFACT_REPOSITORY_DOMAIN=${{ secrets.AWS_CODEARTIFACT_REPOSITORY_DOMAIN }}
-          export AWS_CODEARTIFACT_REPOSITORY_ACCOUNT=${{ secrets.AWS_CODEARTIFACT_REPOSITORY_ACCOUNT }}
-          export AWS_REGION=${{ secrets.AWS_REGION }}
       - name: Checkout current
         uses: actions/checkout@v3
       - name: Set up Python ${{ env.python_version }}
