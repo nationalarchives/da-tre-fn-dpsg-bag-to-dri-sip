@@ -15,8 +15,7 @@ COPY closure-schema.txt ${LAMBDA_TASK_ROOT}
 COPY metadata-schema.txt ${LAMBDA_TASK_ROOT}
 
 # Install the function's dependencies using file requirements.txt
-COPY "*.whl" ./
-COPY tmp-build-requirements.txt ./requirements.txt
+COPY requirements.txt ./requirements.txt
 RUN  yum -y update \
     && yum clean all \
     && aws codeartifact login --tool pip --repository ${AWS_CODEARTIFACT_REPOSITORY_NAME} --domain ${AWS_CODEARTIFACT_REPOSITORY_DOMAIN} --domain-owner ${AWS_CODEARTIFACT_REPOSITORY_ACCOUNT} --region ${AWS_REGION} \
