@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'feature/DTE-476_ECR_image_tre-fn-dpsg-bag-to-dri-sip'
   # Enable manual run; must be in main branch to be available
   workflow_dispatch:
 permissions:
