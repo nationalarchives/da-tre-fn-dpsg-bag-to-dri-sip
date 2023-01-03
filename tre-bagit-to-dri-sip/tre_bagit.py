@@ -6,7 +6,7 @@ from s3_lib import object_lib
 from s3_lib import tar_lib
 from tre_event_lib import tre_event_api
 from tre_bagit_transforms import dri_config_dict
-from tre_bagit import BagitData
+from tre_bagit_to_dri_sip import BagitData
 
 # Set global logging options; AWS environment may override this though
 logging.basicConfig(
