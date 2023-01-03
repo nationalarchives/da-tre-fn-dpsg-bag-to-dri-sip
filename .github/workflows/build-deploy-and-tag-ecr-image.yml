@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'feature/DTE-587-DPSG-ECR-error'
   # Enable manual run; must be in main branch to be available
   workflow_dispatch:
 jobs:
