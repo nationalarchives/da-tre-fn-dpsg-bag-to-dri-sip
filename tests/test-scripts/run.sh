@@ -2,8 +2,8 @@
 set -eE
 
 main() {
-  if [ $# -lt 8 ] || [ $# -gt 8 ]; then
-    echo "Usage: s3_bucket_testdata s3_bucket_in s3_bucket_out consignment_reference consignment_type batch_ref aws_profile"
+  if [ $# -lt 9 ] || [ $# -gt 10 ]; then
+    echo "Usage: s3_bucket_testdata s3_bucket_in s3_bucket_out consignment_reference consignment_type batch_ref aws_profile_non_prod aws_profile_management and optionally replace_folder_boolean"
     return 1
   fi
 
@@ -14,25 +14,26 @@ main() {
   consignment_type="$5"
   pre_signed_timout="$6"
   batch_ref="$7"
-  aws_profile="$8"
+  aws_profile_non_prod="$8"
+  aws_profile_management="$9"
+  replace_folder="${10}"
 
-#  export PYTHONPATH=../../tre-bagit-to-dri-sip
-
+  export AWS_PROFILE="${aws_profile_non_prod}"
   export S3_DRI_OUT_BUCKET="${s3_bucket_out}"
   export TRE_PRESIGNED_URL_EXPIRY="${pre_signed_timout}"
   export TRE_PROCESS_NAME="dev-local-dpsg-process-name"
   export TRE_ENVIRONMENT="dev-local-dpsg-env-name"
   export TRE_SYSTEM_NAME="dev-local-system-name"
 
-  TEST_UUID_DIRECTORY=/test-dpsg-uuid/
-  CONSIGNMENT=consignments/
-  AWS_POST_TEST_PATH=${CONSIGNMENT}${consignment_type}/${consignment_reference}${TEST_UUID_DIRECTORY}
-  AWS_TEST_FILE_PATH=${CONSIGNMENT}${consignment_type}/${consignment_reference}${TEST_UUID_DIRECTORY}${consignment_reference}
+  test_uuid_directory=/test-dpsg-uuid/
+  consignments=consignments/
+  aws_post_test_path=${consignments}${consignment_type}/${consignment_reference}${test_uuid_directory}
+  aws_test_file_path=${consignments}${consignment_type}/${consignment_reference}${test_uuid_directory}${consignment_reference}
 
   #tmp clean up
   rm -rf /tmp/tre-test/*
-  aws s3 rm s3://"${s3_bucket_in}"/"${AWS_POST_TEST_PATH:?}" --recursive
-  aws s3 rm s3://"${s3_bucket_out}"/"${AWS_POST_TEST_PATH:?}" --recursive
+  aws s3 rm s3://"${s3_bucket_in}"/"${aws_post_test_path:?}" --recursive --quiet --profile "${aws_profile_non_prod}"
+  aws s3 rm s3://"${s3_bucket_out}"/"${aws_post_test_path:?}" --recursive --quiet --profile "${aws_profile_non_prod}"
 
   printf -v event '{
     "version": "1.0.0",
@@ -65,36 +66,38 @@ main() {
     "${consignment_type}" \
     "${consignment_reference}" \
     "${s3_bucket_in}" \
-    "${AWS_TEST_FILE_PATH}"
+    "${aws_test_file_path}"
 
   printf 'Generated input event:\n%s\nInvoking test...\n' "${event}"
 
   mkdir -p /tmp/tre-test/input
-  aws s3api get-object --bucket "${s3_bucket_testdata}"  --key ${CONSIGNMENT}"${consignment_type}"/"${consignment_reference}".tar.gz "${consignment_reference}".tar.gz --profile "${aws_profile}"
+  aws s3api get-object --bucket "${s3_bucket_testdata}"  --key da-transform-sample-data/"${consignment_reference}".tar.gz "${consignment_reference}".tar.gz --profile "${aws_profile_management}"
   tar -xf "${consignment_reference}".tar.gz -C /tmp/tre-test/input
-  aws s3 cp --recursive /tmp/tre-test/input s3://"${s3_bucket_in}"/"${AWS_POST_TEST_PATH}"
+  aws s3 cp --recursive /tmp/tre-test/input s3://"${s3_bucket_in}"/"${aws_post_test_path}" --quiet --profile "${aws_profile_non_prod}"
 
+  replace_folder_expected_suffix=""
+  if [ "$replace_folder" = "True" ]
+  then
+    replace_folder_expected_suffix="_rf_true"
+    export TRE_REPLACE_FOLDER="True"
+  fi
   python3 test-bagit-to-dri-sip.py "${event}"
-
-  aws s3api get-object --bucket "${s3_bucket_out}"  --key "${AWS_TEST_FILE_PATH}"/sip/"${batch_ref}".tar.gz "${batch_ref}"_actual.tar.gz
-  aws s3api get-object --bucket "${s3_bucket_out}"  --key "${AWS_TEST_FILE_PATH}"/sip/"${batch_ref}".tar.gz.sha256 "${batch_ref}"_actual.tar.gz.sha256
+  aws s3api get-object --bucket "${s3_bucket_out}"  --key "${aws_test_file_path}"/sip/"${batch_ref}".tar.gz "${batch_ref}"_actual.tar.gz --profile "${aws_profile_non_prod}"
+  aws s3api get-object --bucket "${s3_bucket_out}"  --key "${aws_test_file_path}"/sip/"${batch_ref}".tar.gz.sha256 "${batch_ref}"_actual.tar.gz.sha256 --profile "${aws_profile_non_prod}"
 
   mkdir -p /tmp/tre-test/actual
   tar -xf "${batch_ref}"_actual.tar.gz -C /tmp/tre-test/actual
 
-#  REPLACE_FOLDER="_rf_true"
-  REPLACE_FOLDER=""
-  EXPECTED_FILE="${batch_ref}"_expected${REPLACE_FOLDER}.tar.gz
-
+  expected_files=${batch_ref}${replace_folder_expected_suffix}_expected.tar.gz
   mkdir -p /tmp/tre-test/expected
-  aws s3api get-object --bucket "${s3_bucket_testdata}"  --key ${CONSIGNMENT}"${consignment_type}"/"${EXPECTED_FILE}" "${EXPECTED_FILE}" --profile "${aws_profile}"
-  tar -xf "${EXPECTED_FILE}" -C /tmp/tre-test/expected
+  aws s3api get-object --bucket "${s3_bucket_testdata}"  --key da-transform-sample-data/"${expected_files}" "${expected_files}" --profile "${aws_profile_management}"
+  tar -xf "${expected_files}" -C /tmp/tre-test/expected
 
-  DIFF=$(diff -r /tmp/tre-test/actual /tmp/tre-test/expected)
+  diff=$(diff -r /tmp/tre-test/actual /tmp/tre-test/expected)
   cleanup
-  if [ "$DIFF" != "" ]
+  if [ "$diff" != "" ]
   then
-      echo "$DIFF"
+      echo "$diff"
       echo "<===== TEST FAILED - FILES DO NOT MATCH =====>"
       exit 1
   else
@@ -104,13 +107,15 @@ main() {
 }
 
 function cleanup {
+  unset TRE_REPLACE_FOLDER
+  unset AWS_PROFILE
   rm -rf /tmp/tre-test/*
   rm "${consignment_reference}".tar.gz
   rm "${batch_ref}"_actual.tar.gz
   rm "${batch_ref}"_actual.tar.gz.sha256
-  rm "${EXPECTED_FILE}"
-  aws s3 rm s3://"${s3_bucket_in}"/"${AWS_POST_TEST_PATH:?}" --recursive
-  aws s3 rm s3://"${s3_bucket_out}"/"${AWS_POST_TEST_PATH:?}" --recursive
+  rm "${expected_files}"
+  aws s3 rm s3://"${s3_bucket_in}"/"${aws_post_test_path:?}" --recursive --quiet --profile "${aws_profile_non_prod}"
+  aws s3 rm s3://"${s3_bucket_out}"/"${aws_post_test_path:?}" --recursive --quiet --profile "${aws_profile_non_prod}"
 }
 
 trap cleanup ERR

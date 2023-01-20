@@ -69,9 +69,9 @@ def step_impl(context, output):
         manifest_row = json.load(mf)
     with open(file_metadata_path) as file_metadata:
         file_metadata = csv.DictReader(file_metadata)
-        bagit = BagitData(config_dict, info_dict, manifest_row, file_metadata)
+        bagit = BagitData(config_dict, info_dict, manifest_row, file_metadata, replace_folder=False)
     # run the required transformation and write the csv file to temp_dir
-    dc = dri_config_dict(bagit.consignment_reference, bagit.consignment_series)
+    dc = dri_config_dict(bagit.consignment_reference, bagit.consignment_series, root_folder='content')
     if output == dc['CLOSURE']:
         closure = bagit.to_closure(dc)
         closure_filename = dc['CLOSURE']
