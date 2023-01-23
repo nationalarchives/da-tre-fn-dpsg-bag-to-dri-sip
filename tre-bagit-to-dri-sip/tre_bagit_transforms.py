@@ -6,7 +6,7 @@ def simple_dri_metadata(bagit_metadata_row):
         if k == 'Filepath':
             pass  # used in a function to build dri 'identifier'
         elif k == 'FileName':
-            dri_metadata['file_name'] = v
+            pass  # used in a function to build dri 'file_name'
         elif k == 'FileType':
             if v == 'File':
                 dri_metadata['folder'] = 'file'
@@ -75,20 +75,25 @@ def simple_dri_closure(bagit_metadata_row):
     return dri_closure
 
 
-def dri_config_dict(consignment_reference, consignment_series) -> object:
+def dri_config_dict(consignment_reference, consignment_series, root_folder) -> object:
     metadata = 'metadata.csv'
     closure = 'closure.csv'
+    content_folder = 'content'
     consignment_reference_part = consignment_reference.split("-")
     tdr_year = consignment_reference_part[1]
     tdr_batch_number = consignment_reference_part[2]
     batch = consignment_series.replace(' ', '') + 'Y' + tdr_year[2:] + 'TB' + tdr_batch_number
     series = consignment_series.replace(' ', '_')
     internal_prefix = batch + '/' + series + '/'
+    add_content_if_needed = content_folder + '/' if root_folder != content_folder else ''
+
     return dict(
         BATCH=batch,
         SERIES=series,
         INTERNAL_PREFIX=internal_prefix,
-        IDENTIFIER_PREFIX='file:/' + internal_prefix,
+        CONTENT_FOLDER=content_folder,
+        FOLDER_FILE_PREFIX=internal_prefix + add_content_if_needed + '/',
+        IDENTIFIER_PREFIX='file:/' + internal_prefix + add_content_if_needed,
         METADATA=metadata,
         CLOSURE=closure,
         METADATA_IN_SIP=internal_prefix + metadata,
