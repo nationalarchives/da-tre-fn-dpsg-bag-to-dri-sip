@@ -66,7 +66,7 @@ class TestBagitMethods(unittest.TestCase):
 
     expected_closure = """identifier,folder,closure_start_date,closure_period,foi_exemption_code,foi_exemption_asserted,title_public,title_alternate,closure_type\n""" + \
                        """file:/MOCKA101Y22TBAA1/MOCKA_101/content/file-c1.txt,file,,0,open,,TRUE,,open_on_transfer\n""" + \
-                       """file:/MOCKA101Y22TBAA1/MOCKA_101/content/,folder,,0,open,,TRUE,,open_on_transfer\nZZZ"""
+                       """file:/MOCKA101Y22TBAA1/MOCKA_101/content/,folder,,0,open,,TRUE,,open_on_transfer\n"""
 
     def test_bag_1_1_to_closure(self):
         bagit = make_bagit(csv_string_v_1_1)

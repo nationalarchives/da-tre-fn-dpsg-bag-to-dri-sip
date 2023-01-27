@@ -19,9 +19,17 @@ jobs:
       - name: Run unit tests
         shell: bash
         run: |
-          echo "Local file listing follows:"
-          ls -la
           cd tests/units
+          python -m unittest discover
+      - name: Run feature tests
+        shell: bash
+        run: |
+          echo "Local file listing follows:"
           pwd
           ls -la
-          python -m unittest discover
+          cd tests
+          echo "Another local file listing follows:"
+          pwd
+          ls -la
+          behave
+          cd ..
