@@ -18,7 +18,7 @@ manifest_dict = [
     {
         "file": "data/content/file-c1.txt",
         "basename": "file-c1.txt",
-        "checksum": "5bd8879fba139fed98c048261cb2a91d727ceafb27414cc54e21c26915e9e40f"
+        "checksum": "5bd8879fba139fed98c048261cb2a91d727ceafb27414cc54e21c26915e9e40f"  # pragma: allowlist secret
     }
 ]
 dri_config = dict(
