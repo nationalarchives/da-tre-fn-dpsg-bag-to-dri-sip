@@ -21,7 +21,7 @@ jobs:
         run: |
           echo "Local file listing follows:"
           ls -la
-          cd units
+          cd tests/units
           pwd
           ls -la
           python -m unittest discover
