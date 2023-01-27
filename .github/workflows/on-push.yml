@@ -1,0 +1,17 @@
+name: Run tests
+
+on:
+  push:
+#  pull_request:
+#    branches:
+#      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run unit tests
+        shell: bash
+        run: |
+          echo "Local file listing follows:"
+          ls -la
