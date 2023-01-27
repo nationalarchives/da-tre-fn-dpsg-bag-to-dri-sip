@@ -16,7 +16,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
       - name: Run unit tests
         shell: bash
         run: |
@@ -26,12 +25,12 @@ jobs:
         shell: bash
         run: |
           pip install behave
-          echo "Local file listing follows:"
-          pwd
-          ls -la
           cd tests
-          echo "Another local file listing follows:"
-          pwd
-          ls -la
           behave
-          cd ..
+      - name: Run pre-commit
+        shell: bash
+        run: |
+          pip install pre-commit
+          pre-commit --version
+          pre-commit install
+          pre-commit run --all-files
