@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-sys.path.append("..")
+sys.path.append("../../tre-bagit-to-dri-sip")
 
 from tre_bagit import BagitData
 import csv
@@ -22,13 +22,14 @@ manifest_dict = [
     }
 ]
 dri_config = dict(
-    IDENTIFIER_PREFIX='file:/' + "MOCKA101Y22TBAA1" + '/' + "MOCKA_101" + '/'
+    IDENTIFIER_PREFIX='file:/' + "MOCKA101Y22TBAA1" + '/' + "MOCKA_101" + '/',
+    CONTENT_FOLDER='content'
 )
 
 
 def make_bagit(csv_string):
     csv_data = csv.DictReader(io.StringIO(csv_string))
-    return BagitData(config_dict, info_dict, manifest_dict, csv_data)
+    return BagitData(config_dict, info_dict, manifest_dict, csv_data, replace_folder=False)
 
 
 csv_string_v_1_1 = """Filepath,FileName,FileType,Filesize,RightsCopyright,LegalStatus,HeldBy,Language,FoiExemptionCode,LastModified\n""" + \
