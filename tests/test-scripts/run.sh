@@ -120,4 +120,3 @@ function cleanup {
 
 trap cleanup ERR
 main "$@"
-
