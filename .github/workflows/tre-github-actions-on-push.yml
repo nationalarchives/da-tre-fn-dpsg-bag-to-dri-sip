@@ -14,7 +14,7 @@ on:
         required: true
 jobs:
   check-unit-tests:
-    if: run_unit_tests
+    if: inputs.run_unit_tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current
