@@ -9,8 +9,12 @@ on:
       run_feature_tests:
         type: boolean
         required: true
+      run_pre_commit:
+        type: boolean
+        required: true
 jobs:
   check-unit-tests:
+    if: run_unit_tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current
