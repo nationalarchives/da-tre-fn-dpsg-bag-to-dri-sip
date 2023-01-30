@@ -5,6 +5,6 @@ jobs:
   on-push-workflow:
     uses: ./.github/workflows/tre-github-actions-on-push.yml
     with:
-      run_unit_tests: true
-      run_feature_tests: true
-      run_pre_commit: true
+      run_unit_tests: True
+      run_feature_tests: True
+      run_pre_commit: True
