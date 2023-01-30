@@ -4,7 +4,7 @@ Feature: Verify bagit transforms to dri closure.csv / metadata.csv.
 
     Given a bagit with files that include:
       | File                | Field                          | Value                              |
-      | bag-info.txt        | Consignment-Series             | MOCKA 101                          |
+      | bag-info.txt        | Consignment-Series             | MOCKA 101 ZZZ                         |
       | bag-info.txt        | Internal-Sender-Identifier     | TDR-2022-AA1                       |
       | file-metadata.csv   | Filepath                       | data/content/folder-a/file-a1.txt  |
       | file-metadata.csv   | FileType                       | File                               |
