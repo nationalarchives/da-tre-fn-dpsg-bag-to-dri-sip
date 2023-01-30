@@ -6,4 +6,4 @@ jobs:
     uses: ./.github/workflows/tre-github-actions-on-push.yml
     with:
       run_unit_tests: True
-      run_feature_test: True
+      run_feature_tests: True
