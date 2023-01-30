@@ -30,6 +30,7 @@ jobs:
           python -m unittest discover
   check-feature-tests:
     runs-on: ubuntu-latest
+    if: inputs.run_feature_tests
     steps:
       - name: Checkout current
         uses: actions/checkout@v3
@@ -45,6 +46,7 @@ jobs:
           behave
   check-pre-commit:
     runs-on: ubuntu-latest
+    if: inputs.run_pre_commit
     steps:
       - name: Checkout current
         uses: actions/checkout@v3
