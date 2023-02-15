@@ -3,8 +3,9 @@ on:
   push:
 jobs:
   on-push-workflow:
-    uses: nationalarchives/tre-github-actions/.github/workflows/tre-fn-checks.yml@0.0.5
+    uses: nationalarchives/tre-github-actions/.github/workflows/tre-fn-checks.yml@DTE-619-fn-check
     with:
       run_unit_tests: True
       run_feature_tests: True
       run_pre_commit: True
+      requirements_txt: "tre-bagit-to-dri-sip/requirements.txt"
