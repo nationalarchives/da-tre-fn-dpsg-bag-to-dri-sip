@@ -8,3 +8,4 @@ jobs:
       run_unit_tests: True
       run_feature_tests: True
       run_pre_commit: True
+      requirements_txt: tre-bagit-to-dri-sip/requirements.txt
