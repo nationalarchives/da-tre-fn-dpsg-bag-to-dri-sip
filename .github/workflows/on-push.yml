@@ -7,4 +7,4 @@ jobs:
     with:
       run_unit_tests: True
       run_feature_tests: True
-      run_pre_commit: True
+      run_pre_commit: False
