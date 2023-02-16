@@ -9,3 +9,9 @@ jobs:
       run_feature_tests: True
       run_pre_commit: False
       requirements_txt: tre-bagit-to-dri-sip/requirements.txt
+    secrets:
+      AWS_OPEN_ID_CONNECT_ROLE_ARN: ${{ secrets.AWS_OPEN_ID_CONNECT_ROLE_ARN }}
+      AWS_CODEARTIFACT_REPOSITORY_NAME: ${{ secrets.AWS_CODEARTIFACT_REPOSITORY_NAME }}
+      AWS_CODEARTIFACT_REPOSITORY_DOMAIN: ${{ secrets.AWS_CODEARTIFACT_REPOSITORY_DOMAIN }}
+      AWS_CODEARTIFACT_REPOSITORY_ACCOUNT: ${{ secrets.AWS_CODEARTIFACT_REPOSITORY_ACCOUNT }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
