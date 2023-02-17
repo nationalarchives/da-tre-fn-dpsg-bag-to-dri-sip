@@ -3,7 +3,7 @@ on:
   push:
 jobs:
   on-push-workflow:
-    uses: nationalarchives/tre-github-actions/.github/workflows/tre-fn-checks.yml@DTE-619-fn-check
+    uses: nationalarchives/tre-github-actions/.github/workflows/tre-fn-checks.yml@0.0.6
     with:
       run_unit_tests: True
       run_feature_tests: True
