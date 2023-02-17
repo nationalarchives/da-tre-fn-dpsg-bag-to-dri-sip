@@ -3,7 +3,7 @@
 
 main() {
   if [ $# -lt 5 ] || [ $# -gt 5 ]; then
-    echo "Usage: s3_bucket_testdata s3_bucket_in s3_bucket_out aws_profile"
+    echo "Usage: s3_bucket_testdata s3_bucket_in s3_bucket_out aws_profile_non_prod aws_profile_management"
     return 1
   fi
 

@@ -18,7 +18,7 @@ manifest_dict = [
     {
         "file": "data/content/file-name-has  double-space,and-a-comma.txt",
         "basename": "file-name-has  double-space,and-a-comma.txt",
-        "checksum": "5bd8879fba139fed98c048261cb2a91d727ceafb27414cc54e21c26915e9e40f"
+        "checksum": "5bd8879fba139fed98c048261cb2a91d727ceafb27414cc54e21c26915e9e40f"  # pragma: allowlist secret
     }
 ]
 dri_config = dict(

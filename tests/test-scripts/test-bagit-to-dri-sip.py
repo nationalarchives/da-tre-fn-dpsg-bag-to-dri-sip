@@ -13,4 +13,3 @@ context = None
 
 output = tre_bagit_to_dri_sip.handler(json.loads(event), context)
 print(f'bagit_to_dri_sip output:\n{json.dumps(output, indent=4)}')
-
