@@ -105,4 +105,3 @@ docker build \
   --tag "${REGISTRY}/${REGISTRY_PATH}/${IMAGE_NAME}:${IMAGE_VERSION}" \
   "${DOCKERFILE_DIR}"
 ```
- 
